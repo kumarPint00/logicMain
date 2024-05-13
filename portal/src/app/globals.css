@@ -1,0 +1,23 @@
+body {
+  display: block;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+.carousel .control-next.control-arrow:before {
+  border-left: 8px solid black !important;
+}
+
+.carousel .control-prev.control-arrow:before {
+  border-right: 8px solid black !important;
+}
+
+.carousel.carousel-slider .control-arrow:hover {
+  background: transparent !important;
+}
+
+.css-yfo96e,
+.css-ttn1xo {
+  padding: 0px !important;
+}
+

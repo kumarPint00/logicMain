@@ -1,0 +1,28 @@
+.topBar {
+    background-color: #013049;
+    margin-top: 0px;
+}
+
+.language,
+.currency {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.langIcon {
+    margin-right: 5px;
+}
+
+.topbarContent {
+    display: flex;
+    align-items: center;
+    padding: 15px 0px;
+    justify-content: end;
+}
+
+.arabic h3 {
+    color: white;
+    margin: 0px;
+    font-size: 16px;
+}

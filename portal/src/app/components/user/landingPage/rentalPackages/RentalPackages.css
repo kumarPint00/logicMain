@@ -1,0 +1,56 @@
+.rentPackImg {
+    text-align: center;
+}
+
+.rentPackMain {
+    text-align: center;
+    background-color: #013049;
+    border-radius: 10px;
+}
+
+.rentPackHead {
+    margin-bottom: 30px;
+}
+
+.rentPackMain h5.MuiTypography-root.MuiTypography-h5.MuiTypography-gutterBottom.css-h93ljk-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.334;
+    color: white;
+    letter-spacing: 0em;
+    margin-bottom: 0.35em;
+}
+
+.rentPackMain p.MuiTypography-root.MuiTypography-body2.css-e784if-MuiTypography-root {
+    margin: 0;
+    text-align: justify;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: white;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+}
+
+.rentPackImg img {
+    width: 25%;
+    margin-bottom: 20px;
+}
+
+.rentPackHead h4.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.css-1vw6mcs-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 600;
+    font-size: 2.125rem;
+    line-height: 1.235;
+    color: #013049;
+    letter-spacing: 0.00735em;
+    margin-bottom: 0em;
+    text-align: center;
+}
+
+.rentalPackages {
+    margin-bottom: 20px;
+}

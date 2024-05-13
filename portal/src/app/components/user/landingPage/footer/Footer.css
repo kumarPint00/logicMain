@@ -1,0 +1,37 @@
+.footer {
+    background-color: #013049;
+    margin-top: 50px;
+}
+
+.footerLogo {
+    text-align: left;
+}
+
+.ourServices h3 {
+    color: white;
+    margin: 0px;
+    font-family: sans-serif;
+}
+
+.ourServices li {
+    list-style-type: none;
+    color: white;
+    line-height: 1.5;
+    font-family: sans-serif;
+}
+
+.ourServices ul {
+    padding: 0px;
+}
+
+.footerIcons {
+    margin-top: 17px;
+}
+
+.footerLogo img {
+    width: 100%;
+}
+
+.ourServices {
+    padding-left: 2.5rem;
+}

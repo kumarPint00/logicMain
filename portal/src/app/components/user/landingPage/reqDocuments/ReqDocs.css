@@ -1,0 +1,54 @@
+.docHeadPara h4.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.css-1vw6mcs-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 600;
+    font-size: 2.125rem;
+    line-height: 1.235;
+    color: #013049;
+    letter-spacing: 0.00735em;
+    margin-bottom: 0.5em;
+    text-align: center;
+}
+
+.docHeadPara p.MuiTypography-root.MuiTypography-body2.MuiTypography-gutterBottom.css-ejgmvm-MuiTypography-root {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.required_documents {
+    margin: 50px 0px !important;
+}
+
+.req_heading h1 {
+    text-align: center !important;
+    border-bottom: 1px dotted gray !important;
+}
+
+.req_para p {
+    text-align: justify !important;
+    font-size: 16px !important;
+    font-family: sans-serif !important;
+}
+
+.uae_res h6 {
+    text-align: center !important;
+    font-size: 17px !important;
+    margin: 0px 0 !important;
+    padding: 12px 0 !important;
+    font-weight: 600 !important;
+    background-color: #013049 !important;
+    color: white;
+}
+
+.uae_res {
+    border: 1px solid #dee1e6 !important;
+}
+
+.int_icon {
+    display: flex;
+    align-items: center;
+}
+
+.int_icon p {
+    margin: 10px 0px;
+}

@@ -1,0 +1,55 @@
+.workHead h4.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.css-1vw6mcs-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 600;
+    font-size: 2.125rem;
+    line-height: 1.235;
+    color: #013049;
+    letter-spacing: 0.00735em;
+    margin-bottom: 0.35em;
+    text-align: center;
+}
+
+.workSubHead h5.MuiTypography-root.MuiTypography-h5.MuiTypography-gutterBottom.css-h93ljk-MuiTypography-root {
+    margin: 0 !important;
+    font-family: "Roboto","Helvetica","Arial",sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+    line-height: 1.334 !important;
+    text-align: center !important;
+    letter-spacing: 0em !important;
+    color: #013049 !important;
+    margin-bottom: 0.35em !important;
+}
+
+.workCard h6.MuiTypography-root.MuiTypography-h6.MuiTypography-gutterBottom.css-18k87ye-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    letter-spacing: 0.0075em;
+    margin-bottom: 0.35em;
+    text-align: center;
+}
+
+.workCard p.MuiTypography-root.MuiTypography-body2.MuiTypography-gutterBottom.css-ejgmvm-MuiTypography-root {
+    margin: 0;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    margin-bottom: 0.35em;
+    text-align: center;
+}
+
+
+.howWorksImg {
+    width: 50% !important;
+}
+
+.workImg {
+    text-align: center;
+    margin: 3rem 0px;
+}

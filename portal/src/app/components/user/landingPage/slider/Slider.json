@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "image":"./banner.jpg",
+        "title":"image1"
+    },
+    {
+        "id":2,
+        "image":"./HyundaiAccent.jpg",
+        "title":"image1"
+    },
+    {
+        "id":3,
+        "image":"./HyundaiCreta.jpg",
+        "title":"image1"
+    },
+    {
+        "id":4,
+        "image":"./Mazda6.jpg",
+        "title":"image1"
+    },
+    {
+        "id":5,
+        "image":"../misbahattrage.jpg",
+        "title":"image1"
+    },
+    {
+        "id":6,
+        "image":"./nissansunny.jpg",
+        "title":"image1"
+    }
+]
