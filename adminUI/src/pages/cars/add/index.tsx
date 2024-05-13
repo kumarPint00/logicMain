@@ -9,7 +9,7 @@ import Accordion from '@mui/material/Accordion'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import {AccordionDetails,InputLabel,Select,MenuItem} from '@mui/material'
+import {AccordionDetails,InputLabel,Select,MenuItem, Box} from '@mui/material'
 
 // ** Third Party Imports
 
@@ -27,23 +27,16 @@ import axios from 'axios'
 import CardSnippet from 'src/@core/components/card-snippet'
 import FileUploaderMultiple from 'src/views/forms/form-elements/file-uploader/FileUploaderMultiple'
 import { FormControl } from '@mui/material'
-const brandsAndModels = [
-  {
-    brand: "Toyota",
-    models: ["Corolla", "Camry", "Prius"]
-  },
-  {
-    brand: "Ford",
-    models: ["F-150", "Mustang", "Escape"]
-  },
-  {
-    brand: "BMW",
-    models: ["3 Series", "5 Series", "X5"]
-  }
-];
+import { brandsAndModels, colors } from 'src/lib/brandAmodels'
+
 const CarAddition = () => {
   const { register, handleSubmit } = useForm();
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
+  const [selectedModel, setSelectedModel] = useState('');
+  const [selectedVersion, setSelectedVersion] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
 
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
@@ -83,6 +76,28 @@ const handleImageUpload = (event) => {
   const handleChange = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false)
   }
+  const handleBrandChange = (event) => {
+    setSelectedBrand(event.target.value);
+  };
+
+  const handleModelChange = (event) => {
+    setSelectedModel(event.target.value);
+  };
+
+  const handleVersionChange = (event) => {
+    setSelectedVersion(event.target.value);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
+
+  const handleColorChange = (event) => {
+    setSelectedColor(event.target.value);
+  };
+  const filteredModels = brandsAndModels.find(brand => brand.brand === selectedBrand)?.models || [];
+  const versions = ['Version 1', 'Version 2', 'Version 3']; // Example versions, adjust as needed
+  const years = Array.from({length: 50}, (_, i) => 2023 - i); // Generates years from 2023 to 1973
 
 
   return (
@@ -101,86 +116,92 @@ const handleImageUpload = (event) => {
         <AccordionDetails>
           <Grid container spacing={5}>
 
-              <Grid item xs={6} sm={3}> 
+          <Grid item xs={6} sm={3}>
               <FormControl fullWidth>
-            <InputLabel id="brand-label">Brand</InputLabel>
-            <Select
-              labelId="brand-label"
-              id="brand-select"
-              // value={brand}
-              // onChange={handleBrandChange}
-              label="Brand"
-              {...register('brand')}
-            >
-              <MenuItem value="">Select Brand</MenuItem>
-              {brandsAndModels.map((brandData) => (
-                <MenuItem key={brandData.brand} value={brandData.brand}>
-                  {brandData.brand}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>              </Grid>
-              <Grid item xs={6} sm={3}> 
+                <InputLabel id="brand-label">Brand</InputLabel>
+                <Select
+                  labelId="brand-label"
+                  id="brand-select"
+                  value={selectedBrand}
+                  label="Brand"
+                  {...register('brand')}
+                  onChange={handleBrandChange}
+
+                >
+                  <MenuItem value="">Select Brand</MenuItem>
+                  {brandsAndModels.map((brandData) => (
+                    <MenuItem key={brandData.brand} value={brandData.brand}>
+                      {brandData.brand}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6} sm={3}>
               <FormControl fullWidth>
-            <InputLabel id="brand-label">Model</InputLabel>
-            <Select
-              labelId="model-label"
-              id="model-select"
-              // value={model}
-              // onChange={handlemodelChange}
-              label="model"
-              {...register('model')}
-            >
-              <MenuItem value="">Select model</MenuItem>
-              {brandsAndModels.map((brandData) => (
-                <MenuItem key={brandData.brand} value={brandData.brand}>
-                  {brandData.brand}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>              </Grid>
+                <InputLabel id="model-label">Model</InputLabel>
+                <Select
+                  labelId="model-label"
+                  id="model-select"
+                  value={selectedModel}
+                  label="model"
+                  {...register('model')}
+                  onChange={handleModelChange}
+
+                >
+                  <MenuItem value="">Select model</MenuItem>
+                  {filteredModels.map((model) => (
+                    <MenuItem key={model} value={model}>
+                      {model}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
  
             {/* <Grid item xs={6} sm={3}> */}
               {/* <TextField multiline rows={3} fullWidth label='Description' placeholder='description' {...register('description')} /> */}
             {/* </Grid> */}
             <Grid item xs={6} sm={3}>
-            <FormControl fullWidth>
-            <InputLabel id="version-label">Version</InputLabel>
-            <Select
-              labelId="version-label"
-              id="version-select"
-              // value={version}
-              // onChange={handleversionChange}
-              label="version"
-              {...register('version')}
-            >
-              <MenuItem value="">Select version</MenuItem>
-              {brandsAndModels.map((brandData) => (
-                <MenuItem key={brandData.brand} value={brandData.brand}>
-                  {brandData.brand}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>            </Grid>
+              <FormControl fullWidth>
+                <InputLabel id="version-label">Version</InputLabel>
+                <Select
+                  labelId="version-label"
+                  id="version-select"
+                  value={selectedVersion}
+                  label="version"
+                  {...register('version')}
+                  onChange={handleVersionChange}
+                >
+                  <MenuItem value="">Select version</MenuItem>
+                  {versions.map((version) => (
+                    <MenuItem key={version} value={version}>
+                      {version}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
             <Grid item xs={6} sm={3}>
-            <FormControl fullWidth>
-            <InputLabel id="year-label">Year</InputLabel>
-            <Select
-              labelId="year-label"
-              id="year-select"
-              // value={year}
-              // onChange={handleyearChange}
-              label="year"
-              {...register('year')}
-            >
-              <MenuItem value="">Select year</MenuItem>
-              {brandsAndModels.map((brandData) => (
-                <MenuItem key={brandData.brand} value={brandData.brand}>
-                  {brandData.brand}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>            </Grid>
+              <FormControl fullWidth>
+                <InputLabel id="year-label">Year</InputLabel>
+                <Select
+                  labelId="year-label"
+                  id="year-select"
+                  value={selectedYear}
+                  label="year"
+                  {...register('year')}
+                  onChange={handleYearChange}
+                >
+                  <MenuItem value="">Select year</MenuItem>
+                  {years.map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
         
           </Grid>
         </AccordionDetails>
@@ -205,17 +226,23 @@ const handleImageUpload = (event) => {
             <Select
               labelId="colour-label"
               id="colour-select"
-              // value={colour}
-              // onChange={handlecolourChange}
+              value={selectedColor}
               label="colour"
               {...register('colour')}
+              onChange={handleColorChange}
             >
               <MenuItem value="">Select colour</MenuItem>
-              {brandsAndModels.map((brandData) => (
-                <MenuItem key={brandData.brand} value={brandData.brand}>
-                  {brandData.brand}
-                </MenuItem>
-              ))}
+              {colors.map((color) => (
+        <MenuItem key={color} value={color} sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}>
+          <Box sx={{ backgroundColor: color, width: 20, height: 20,  }} />
+          <Typography variant="body2" sx={{ ml: 1 }}>
+            {color}
+          </Typography>
+        </MenuItem>
+      ))}
             </Select>
           </FormControl>            </Grid>
             <Grid item xs={12} sm={3}>

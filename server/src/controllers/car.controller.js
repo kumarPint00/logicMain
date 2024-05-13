@@ -51,23 +51,6 @@ const createCar = asyncHandler(async (req, res) => {
     rearCamera,
     imageType
   } = req.body;
-  // if (
-  //   ![
-  //     name,
-  //     brand,
-  //     model,
-  //     interiorColor,
-  //     exteriorColor,
-  //     year,
-  //     category,
-  //     location,
-  //     vehicleType,
-  //     status,
-  //     imageType
-  //   ].some((field) => field?.trim())
-  // ) {
-  //   throw new ApiError(400, "All required fields must be provided");
-  // }
   const carImagePath = req.files?.carImages[0]?.path;
 
   if (!carImagePath) {
@@ -82,7 +65,7 @@ const createCar = asyncHandler(async (req, res) => {
     imageUrl: carImage.url,
     imageType: imageType,
   })
-  // Create car document
+
   const carFeatures = await CarFeature.create({
     transmission,
     cruiseControl,
@@ -134,7 +117,6 @@ const createCar = asyncHandler(async (req, res) => {
     carImages: carImages._id,
   });
 
-
   const createdCar = await Car.findOne(car._id).populate("carFeatures").populate("packageDetails").populate("carImages").select('-_id -__v')
  
   const createdCarforWhatsapp = await Car.findOne(car._id).populate("packageDetails").select('-_id -__v')
@@ -149,32 +131,25 @@ const createCar = asyncHandler(async (req, res) => {
 
   sendWhatsAppmessage({ message: `New Car Created \n ${createdCarforWhatsapp}` });
 
-
   res.status(201).json({
     success: true,
     message: "Car created successfully",
     data: createdCar,
   });
+});
 
-}
-);
-
-// Get all cars
 const getAllCars = asyncHandler(async (req, res) => {
   try{
     const cars = await Car.find({}).populate("carFeatures").populate("packageDetails").populate("carImages");
-
-  res.status(200).json({
-    success: true,
-    data: cars,
-  });
+    res.status(200).json({
+      success: true,
+      data: cars,
+    });
   } catch(error) {
     throw new ApiError(500, "Something went wrong while getting the cars");
-}
-}
-);
+  }
+});
 
-// Get car by ID
 const getCarById = asyncHandler(async (req, res) => {
   const carId = req.params.id;
   const car = await Car.findOne(carId).populate("carFeatures").populate("packageDetails").populate("carImages");
@@ -187,7 +162,6 @@ const getCarById = asyncHandler(async (req, res) => {
   });
 });
 
-// Get cars by brand
 const getCarsByBrand = asyncHandler(async (req, res) => {
   const brand = req.params.brand;
   const cars = await Car.find({ brand: brand }).populate("carFeatures").populate("packageDetails").populate("carImages");
@@ -197,7 +171,6 @@ const getCarsByBrand = asyncHandler(async (req, res) => {
   });
 });
 
-// Get cars by location
 const getCarsByLocation = asyncHandler(async (req, res) => {
   const location = req.params.location;
   const cars = await Car.find({ location: location }).populate("carFeatures").populate("packageDetails").populate("carImages");
@@ -207,7 +180,6 @@ const getCarsByLocation = asyncHandler(async (req, res) => {
   });
 });
 
-// Get cars by price range
 const getCarsByPriceRange = asyncHandler(async (req, res) => {
   const minPrice = req.query.minPrice;
   const maxPrice = req.query.maxPrice;
@@ -223,7 +195,6 @@ const getCarsByPriceRange = asyncHandler(async (req, res) => {
   });
 });
 
-// Get cars by segment
 const getCarsBySegment = asyncHandler(async (req, res) => {
   const segment = req.params.segment;
   const cars = await Car.find({ category: segment }).populate("carFeatures").populate("packageDetails").populate("carImages");
@@ -233,7 +204,6 @@ const getCarsBySegment = asyncHandler(async (req, res) => {
   });
 });
 
-// Update car by ID
 const updateCarById = asyncHandler(async (req, res) => {
   const carId = req.params.id;
   const updates = req.body;
@@ -248,7 +218,6 @@ const updateCarById = asyncHandler(async (req, res) => {
   });
 });
 
-// Delete car by ID
 const deleteCarById = asyncHandler(async (req, res) => {
   const carId = req.params.id;
   const car = await Car.findOneAndDelete(carId);
@@ -273,4 +242,5 @@ export {
   updateCarById,
   deleteCarById,
 };
+
 // 447EJK66XM41XPLEQSZ25KJ8 -- twilio recovery key
