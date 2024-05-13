@@ -1,0 +1,101 @@
+/node_modules
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids
+*.pid
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional babel cache
+.cache
+
+# Optional yarn v2 cache
+.yarn
+
+# Optional yarn v3 cache
+.yarn/cache
+
+# Editor directories and files
+*.userprefs.json
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.production.local
+.env.staging.local
+.env.test.local
+
+# Webpacker's default configuration
+config/webpack.config.js
+
+# node-plop.js configuration
+plop.config.js
+
+# jsconfig
+jsconfig.json
+
+# tsconfig
+tsconfig.json
+
+# .cache
+.cache
+
+# .idea
+.idea
+
+# .vscode
+.vscode
+
+# next.js build output
+.next
+.out
+public/static
+
+# apollo client cache
+apollo-cache-inmemory
+apollo-client
+apollo-cache-ramda
+
+# serverless configurations
+serverless.yml
+serverless.config.js
+
+# Next.js generated files
+.next
+.env.development.local
+.env.production.local
+.env.staging.local
+.env.test.local
+.env.local
+.env.public.local
+.env.local.node
+.env.development.local.node
+.env.production.local.node
+.env.staging.local.node
+.env.test.local.node
+.env.local.node
+
+# sapper generated files
+dist
