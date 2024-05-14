@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns, GridEventListener, GridRenderCellParams } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CustomChip from 'src/@core/components/mui/chip';
 import CustomAvatar from 'src/@core/components/mui/avatar';
 import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar';
-
+import { dummyCarData } from 'src/lib/brandAmodels';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 const columns: GridColumns = [
   { field: 'name', headerName: 'Name', width: 150 },
   { field: 'brand', headerName: 'Brand', width: 150 },
@@ -49,35 +50,39 @@ const CarTable = () => {
   const [total, setTotal] = useState<number>(0);
   const [sort, setSort] = useState('asc');
   const [pageSize, setPageSize] = useState(7);
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState(dummyCarData);
+  console.log("🚀 ~ CarTable ~ rows:", rows)
   const [searchValue, setSearchValue] = useState('');
   const [sortColumn, setSortColumn] = useState('name');
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('')
 
   function loadServerRows(currentPage: number, data: any[]) {
     return data.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
   }
 
-  const fetchTableData = useCallback(
-    async (sort: string, q: string, column: string) => {
-      await axios
-  .get('/api/cars', {
-          params: {
-            q,
-            sort,
-            column,
-          },
-        })
-  .then((res) => {
-          setTotal(res.data.total);
-          setRows(loadServerRows(page, res.data.data));
-        });
-    },
-    [page, pageSize]
-  );
+  // const fetchTableData = useCallback(
+  //   async (sort: string, q: string, column: string) => {
+  //     await axios
+  // .get('/api/cars', {
+  //         params: {
+  //           q,
+  //           sort,
+  //           column,
+  //         },
+  //       })
+  // .then((res) => {
+  //         setTotal(res.data.total);
+  //         setRows(loadServerRows(page, res.data.data));
+  //       });
+  //   },
+  //   [page, pageSize]
+  // );
 
-  useEffect(() => {
-    fetchTableData(sort, searchValue, sortColumn);
-  }, [fetchTableData, searchValue, sort, sortColumn]);
+  // useEffect(() => {
+  //   fetchTableData(sort, searchValue, sortColumn);
+  // }, [fetchTableData, searchValue, sort, sortColumn]);
 
   const handleSortModel = (newModel: any) => {
     if (newModel.length) {
@@ -93,6 +98,23 @@ const CarTable = () => {
   const handleSearch = (value: string) => {
     setSearchValue(value);
     fetchTableData(sort, value, sortColumn);
+  };
+
+
+  const handleEvent: GridEventListener<'rowClick'> = (
+    params,
+    event, 
+    details,
+  ) => {
+    console.log('row clicked', params, event, details);
+    setMessage(`Movie "${params.row.title}" clicked`);
+    setSelectedRow(params.row);
+    setOpen(true);
+  };
+  
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -115,7 +137,19 @@ const CarTable = () => {
             onChange: (event: any) => handleSearch(event.target.value),
           },
         }}
+        onRowClick={handleEvent}
       />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Car Details</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {JSON.stringify(selectedRow, null, 2)}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

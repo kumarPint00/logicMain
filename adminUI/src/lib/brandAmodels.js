@@ -183,4 +183,250 @@ export const colors = [
     'LightYellow',
     'LightGray',
   ];
+ 
+  
+export const dummyCarData1 = [
+    {
+      id: 1,
+      name: 'Car 1',
+      brand: 'Brand 1',
+      model: 'Model 1',
+      interiorColor: 'Red',
+      exteriorColor: 'Blue',
+      year: 2010,
+      category: 'Category 1',
+      location: 'Location 1',
+      vehicleType: 'Vehicle Type 1',
+      featuredCar: true,
+      status: 'Available',
+      services: 'Service 1',
+      insurranceDetails: {
+        standardInsurrance: {
+          sIprice: 100
+        },
+        fullInsurrance: {
+          fIprice: 200
+        }
+      },
+      packageDetails: {
+        securityDeposit: 500,
+        excessClaimAmount: 1000,
+        paymentMethods: {
+          creditCard: true
+        }
+      },
+      carFeatures: {
+        transmission: 'Automatic',
+        cruiseControl: true,
+        engineCapacity: 2000,
+        luggageBootCapacity: 500,
+        engineSize: 2.0,
+        bluetooth: true,
+        aux: true,
+        seater: 5,
+        navigation: true,
+        parkingSense: true,
+        appleCarPlay: true,
+        isoFix: true,
+        sunRoof: true,
+        pushButtonStart: true,
+        lcd: true,
+        rearCamera: true
+      }
+    },
+    {
+      id: 2,
+      name: 'Car 2',
+      brand: 'Brand 2',
+      model: 'Model 2',
+      interiorColor: 'Blue',
+      exteriorColor: 'Red',
+      year: 2015,
+      category: 'Category 2',
+      location: 'Location 2',
+      vehicleType: 'Vehicle Type 2',
+      featuredCar: false,
+      status: 'Available',
+      services: 'Service 2',
+      insurranceDetails: {
+        standardInsurrance: {
+          sIprice: 150
+        },
+        fullInsurrance: {
+          fIprice: 300
+        }
+      },
+      packageDetails: {
+        securityDeposit: 600,
+        excessClaimAmount: 1200,
+        paymentMethods: {
+          creditCard: true
+        }
+      },
+      carFeatures: {
+        transmission: 'Manual',
+        cruiseControl: true,
+        engineCapacity: 2500,
+        luggageBootCapacity: 600,
+        engineSize: 2.5,
+        bluetooth: true,
+        aux: true,
+        seater: 4,
+        navigation: true,
+        parkingSense: true,
+        appleCarPlay: true,
+        isoFix: true,
+        sunRoof: true,
+        pushButtonStart: true,
+        lcd: true,
+        rearCamera: true
+      }
+    },
+    {
+      id: 3,
+      name: 'Car 3',
+      brand: 'Brand 3',
+      model: 'Model 3',
+      interiorColor: 'Green',
+      exteriorColor: 'Yellow',
+      year: 2012,
+      category: 'Category 3',
+      location: 'Location 3',
+      vehicleType: 'Vehicle Type 3',
+      featuredCar: true,
+      status: 'Available',
+      services: 'Service 3',
+      insurranceDetails: {
+        standardInsurrance: {
+          sIprice: 120
+        },
+        fullInsurrance: {
+          fIprice: 250
+        }
+      },
+      packageDetails: {
+        securityDeposit: 700,
+        excessClaimAmount: 1300,
+        paymentMethods: {
+          creditCard: true
+        }
+      },
+      carFeatures: {
+        transmission: 'Automatic',
+        cruiseControl: true,
+        engineCapacity: 2200,
+        luggageBootCapacity: 700,
+        engineSize: 2.2,
+        bluetooth: true,
+        aux: true,
+        seater: 6,
+        navigation: true,
+        parkingSense: true,
+        appleCarPlay: true,
+        isoFix: true,
+        sunRoof: true,
+        pushButtonStart: true,
+        lcd: true,
+        rearCamera: true
+      }
+    },
+    {
+      id: 50,
+      name: 'Car 50',
+      brand: 'Brand 50',
+      model: 'Model 50',
+      interiorColor: 'Purple',
+      exteriorColor: 'Pink',
+      year: 2020,
+      category: 'Category 50',
+      location: 'Location 50',
+      vehicleType: 'Vehicle Type 50',
+      featuredCar: true,
+      status: 'Available',
+      services: 'Service 50',
+      insurranceDetails: {
+        standardInsurrance: {
+          sIprice: 500
+        },
+        fullInsurrance: {
+          fIprice: 1000
+        }
+      },
+      packageDetails: {
+        securityDeposit: 1000,
+        excessClaimAmount: 2000,
+        paymentMethods: {
+          creditCard: true
+        }
+      },
+      carFeatures: {
+        transmission: 'Automatic',
+        cruiseControl: true,
+        engineCapacity: 3000,
+        luggageBootCapacity: 1000,
+        engineSize: 3.0,
+        bluetooth: true,
+        aux: true,
+        seater: 8,
+        navigation: true,
+        parkingSense: true,
+        appleCarPlay: true,
+        isoFix: true,
+        sunRoof: true,
+        pushButtonStart: true,
+        lcd: true,
+        rearCamera: true
+      }
+    }
+  ];
+
+export  const dummyCarData = Array.from({ length: 50 }, (_, i) => ({
+    id: i,
+    name: `Car ${i + 1}`,
+    brand: `Brand ${i % 5 + 1}`,
+    model: `Model ${i % 10 + 1}`,
+    interiorColor: `Color ${i % 5 + 1}`,
+    exteriorColor: `Color ${i % 5 + 1}`,
+    year: 2020 + i % 20,
+    category: `Category ${i % 4 + 1}`,
+    location: `Location ${i % 5 + 1}`,
+    vehicleType: `Vehicle Type ${i % 3 + 1}`,
+    featuredCar: i % 2 === 0,
+    status: `Status ${i % 3 + 1}`,
+    services: `Services ${i % 5 + 1}`,
+    insurranceDetails: {
+      strandardInsurrance: {
+        sIprice: 1000 + i * 10,
+      },
+      fullInsurrance: {
+        fIprice: 2000 + i * 20,
+      },
+    },
+    description: `Description ${i % 10 + 1}`,
+    packageDetails: {
+      securityDeposit: 500 + i * 50,
+      ExcessClaimAmount: 1000 + i * 100,
+      paymentMethods: {
+        creditCard: `Credit Card ${i % 2 + 1}`,
+      },
+    },
+    carFeatures: {
+      transmission: `Transmission ${i % 3 + 1}`,
+      cruiseControl: i % 2 === 0,
+      engineCapacity: `Engine Capacity ${i % 5 + 1}`,
+      luggageBootCapacity: `Luggage Boot Capacity ${i % 5 + 1}`,
+      engineSize: `Engine Size ${i % 5 + 1}`,
+      bluetooth: i % 2 === 0,
+      aux: `Auxiliary Input ${i % 2 + 1}`,
+      seater: `Seater Capacity ${i % 5 + 1}`,
+      navigation: i % 2 === 0,
+      parkingSense: `Parking Sense ${i % 2 + 1}`,
+      appleCarPlay: i % 2 === 0,
+      isoFix: `ISO Fix ${i % 2 + 1}`,
+      sunRoof: i % 2 === 0,
+      pushButton: `Push Button Start ${i % 2 + 1}`,
+      lcd: `LCD Display ${i % 2 + 1}`,
+      rearCamera: `Rear Camera ${i % 2 + 1}`,
+    },
+  }));
   

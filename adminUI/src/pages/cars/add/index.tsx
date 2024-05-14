@@ -237,10 +237,14 @@ const handleImageUpload = (event) => {
           display: 'flex',
           justifyContent: 'space-between',
         }}>
+          <Box display="flex">
           <Box sx={{ backgroundColor: color, width: 20, height: 20,  }} />
-          <Typography variant="body2" sx={{ ml: 1 }}>
+          <Typography variant="body2" sx={{ ml: 1, color:color }}>
             {color}
           </Typography>
+
+          </Box>
+       
         </MenuItem>
       ))}
             </Select>
