@@ -1,5 +1,5 @@
 // ** React Imports
-import { Fragment, useState, SyntheticEvent } from 'react'
+import { Fragment, useState, SyntheticEvent, FC } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -19,9 +19,10 @@ import FileDocumentOutline from 'mdi-material-ui/FileDocumentOutline'
 import { useDropzone } from 'react-dropzone'
 
 interface FileProp {
-  name: string
-  type: string
-  size: number
+  name?: string
+  type?: string
+  size?: number
+  handleImageUpload?: () => void
 }
 
 // Styled component for the upload image inside the dropzone area
@@ -45,7 +46,7 @@ const HeadingTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   }
 }))
 
-const FileUploaderMultiple = () => {
+const FileUploaderMultiple: FC<FileProp> = ({handleImageUpload}) => {
   // ** State
   const [files, setFiles] = useState<File[]>([])
 
@@ -122,7 +123,7 @@ const FileUploaderMultiple = () => {
             <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
               Remove All
             </Button>
-            <Button variant='contained'>Upload Files</Button>
+            <Button variant='contained' onClick={handleImageUpload}>Upload Files</Button>
           </div>
         </Fragment>
       ) : null}

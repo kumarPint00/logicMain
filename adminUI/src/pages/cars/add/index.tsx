@@ -24,7 +24,6 @@ import 'react-credit-cards/es/styles-compiled.css'
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import CardSnippet from 'src/@core/components/card-snippet'
 import FileUploaderMultiple from 'src/views/forms/form-elements/file-uploader/FileUploaderMultiple'
 import { FormControl } from '@mui/material'
 import { brandsAndModels, colors } from 'src/lib/brandAmodels'
@@ -49,20 +48,18 @@ const handleImageUpload = (event) => {
 
 
  
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
+    console.log("🚀 ~ onSubmit ~ data:", data)
+    
     try {
      
       const response = await axios.post('http://localhost:8000/api/v1/admin/createNewCar', {
        ...data,
-        // carImages: carImagesUrls, // Assuming this is the correct field name
+       image: imagePreviewUrl
       });
   
       toast.success('Car created successfully!', {
         position: 'bottom-right',
-        autoClose: 3000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
       });
   
       console.log(response.data);
@@ -539,7 +536,7 @@ const handleImageUpload = (event) => {
     <Grid container spacing={5}>
     <Grid item xs={12}>
          
-            <FileUploaderMultiple />
+            <FileUploaderMultiple handleImageUpload={handleImageUpload}/>
     </Grid>
     </Grid>
   </AccordionDetails>
