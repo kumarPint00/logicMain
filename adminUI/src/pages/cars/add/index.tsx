@@ -37,6 +37,7 @@ const CarAddition = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedColorInterior, setSelectedColorInterior] = useState('');
+  const [selectedColorExterior, setSelectedColorExterior] = useState('');
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -95,6 +96,9 @@ const CarAddition = () => {
 
   const handleColorChangeInterior = (event) => {
     setSelectedColorInterior(event.target.value);
+  }
+  const handleColorChangeExterior = (event) => {
+    setSelectedColorExterior(event.target.value);
   }
   const filteredModels = brandsAndModels.find(brand => brand.brand === selectedBrand)?.models || [];
   const versions = ['Version 1', 'Version 2', 'Version 3']; // Example versions, adjust as needed
@@ -304,8 +308,34 @@ const CarAddition = () => {
                 </Select>
               </FormControl>             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Exterior Color' placeholder='Exterior Color' {...register('exteriorColor')} />
-            </Grid>
+            <FormControl fullWidth>
+                <InputLabel id="colour-label-exterior">Exterior Colors</InputLabel>
+                <Select
+                  labelId="colour-label-exterior"
+                  id="colour-select-exterior"
+                  value={selectedColorExterior}
+                  label="colourExterior"
+                  {...register('colourExterior')}
+                  onChange={handleColorChangeExterior}
+                >
+                  <MenuItem value="">Select colour</MenuItem>
+                  {colors.map((color) => (
+                    <MenuItem key={color} value={color} sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}>
+                      <Box display="flex">
+                        <Box sx={{ backgroundColor: color, width: 20, height: 20, }} />
+                        <Typography variant="body2" sx={{ ml: 1, color: color }}>
+                          {color}
+                        </Typography>
+
+                      </Box>
+
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>              </Grid>
             <Grid item xs={12} sm={6}>
               <TextField fullWidth label='Category' placeholder='Category' {...register('category')} />
             </Grid>
