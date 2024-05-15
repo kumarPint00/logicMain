@@ -9,7 +9,7 @@ import Accordion from '@mui/material/Accordion'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import {AccordionDetails,InputLabel,Select,MenuItem, Box} from '@mui/material'
+import { AccordionDetails, InputLabel, Select, MenuItem, Box, Checkbox, FormControlLabel } from '@mui/material'
 
 // ** Third Party Imports
 
@@ -36,38 +36,38 @@ const CarAddition = () => {
   const [selectedVersion, setSelectedVersion] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColorInterior, setSelectedColorInterior] = useState('');
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImagePreviewUrl(URL.createObjectURL(file));
+    } else {
+      setImagePreviewUrl('');
+    }
+  };
 
-const handleImageUpload = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    setImagePreviewUrl(URL.createObjectURL(file));
-  } else {
-    setImagePreviewUrl('');
-  }
-};
 
 
- 
   const onSubmit = async (data: any) => {
     console.log("🚀 ~ onSubmit ~ data:", data)
-    
+
     try {
-     
+
       const response = await axios.post('http://localhost:8000/api/v1/admin/createNewCar', {
-       ...data,
-       image: imagePreviewUrl
+        ...data,
+        image: imagePreviewUrl
       });
-  
+
       toast.success('Car created successfully!', {
         position: 'bottom-right',
       });
-  
+
       console.log(response.data);
     } catch (error) {
       console.error('Error:', error);
     }
   };
-  
+
   const [expanded, setExpanded] = useState('panel1')
 
   const handleChange = panel => (event, isExpanded) => {
@@ -92,9 +92,13 @@ const handleImageUpload = (event) => {
   const handleColorChange = (event) => {
     setSelectedColor(event.target.value);
   };
+
+  const handleColorChangeInterior = (event) => {
+    setSelectedColorInterior(event.target.value);
+  }
   const filteredModels = brandsAndModels.find(brand => brand.brand === selectedBrand)?.models || [];
   const versions = ['Version 1', 'Version 2', 'Version 3']; // Example versions, adjust as needed
-  const years = Array.from({length: 50}, (_, i) => 2023 - i); // Generates years from 2023 to 1973
+  const years = Array.from({ length: 50 }, (_, i) => 2023 - i); // Generates years from 2023 to 1973
 
 
   return (
@@ -113,7 +117,7 @@ const handleImageUpload = (event) => {
         <AccordionDetails>
           <Grid container spacing={5}>
 
-          <Grid item xs={6} sm={3}>
+            <Grid item xs={6} sm={3}>
               <FormControl fullWidth>
                 <InputLabel id="brand-label">Brand</InputLabel>
                 <Select
@@ -155,9 +159,9 @@ const handleImageUpload = (event) => {
                 </Select>
               </FormControl>
             </Grid>
- 
+
             {/* <Grid item xs={6} sm={3}> */}
-              {/* <TextField multiline rows={3} fullWidth label='Description' placeholder='description' {...register('description')} /> */}
+            {/* <TextField multiline rows={3} fullWidth label='Description' placeholder='description' {...register('description')} /> */}
             {/* </Grid> */}
             <Grid item xs={6} sm={3}>
               <FormControl fullWidth>
@@ -199,7 +203,7 @@ const handleImageUpload = (event) => {
                 </Select>
               </FormControl>
             </Grid>
-        
+
           </Grid>
         </AccordionDetails>
       </Accordion>
@@ -211,41 +215,42 @@ const handleImageUpload = (event) => {
           aria-controls='form-layouts-collapsible-content-2'
         >
           <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-           CAR SPECS
+            CAR SPECS
           </Typography>
         </AccordionSummary>
         <Divider sx={{ m: 0 }} />
         <AccordionDetails>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={3}>
-            <FormControl fullWidth>
-            <InputLabel id="colour-label">Available Colours</InputLabel>
-            <Select
-              labelId="colour-label"
-              id="colour-select"
-              value={selectedColor}
-              label="colour"
-              {...register('colour')}
-              onChange={handleColorChange}
-            >
-              <MenuItem value="">Select colour</MenuItem>
-              {colors.map((color) => (
-        <MenuItem key={color} value={color} sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-        }}>
-          <Box display="flex">
-          <Box sx={{ backgroundColor: color, width: 20, height: 20,  }} />
-          <Typography variant="body2" sx={{ ml: 1, color:color }}>
-            {color}
-          </Typography>
+              <FormControl fullWidth>
+                <InputLabel id="colour-label">Available Colours</InputLabel>
+                <Select
+                  labelId="colour-label"
+                  id="colour-select"
+                  value={selectedColor}
+                  label="colour"
+                  {...register('colour')}
+                  onChange={handleColorChange}
+                >
+                  <MenuItem value="">Select colour</MenuItem>
+                  {colors.map((color) => (
+                    <MenuItem key={color} value={color} sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}>
+                      <Box display="flex">
+                        <Box sx={{ backgroundColor: color, width: 20, height: 20, }} />
+                        <Typography variant="body2" sx={{ ml: 1, color: color }}>
+                          {color}
+                        </Typography>
 
-          </Box>
-       
-        </MenuItem>
-      ))}
-            </Select>
-          </FormControl>            </Grid>
+                      </Box>
+
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>         
+            </Grid>
             <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Car Features' placeholder='Car Features' {...register('carFeatures')} />
             </Grid>
@@ -255,40 +260,67 @@ const handleImageUpload = (event) => {
             <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Transmission' placeholder='Transmission' {...register('transmission')} />
             </Grid>
-          
+
             <Grid item xs={12} sm={3}>
-              <TextField fullWidth label='Cruise controls' placeholder='Cruise controls' {...register('cruiseControl')} />
+            <FormControlLabel control={<Checkbox defaultChecked />} label="Cruise controls" {...register('cruiseControl')}/>
+              {/* <Checkbox label='Cruise controls' placeholder='Cruise controls' {...register('cruiseControl')} /> */}
             </Grid>
-              <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Fuel Type' placeholder='Fuel Type' {...register('FuelType')} />
             </Grid>
-              <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Engine Capacity' placeholder='Engine Capacity' {...register('engineCapacity')} />
             </Grid>
-              <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Boot Capactiy' placeholder='Boot Capactiy' {...register('bootCapacity')} />
             </Grid>
             <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Interior Color' placeholder='Interior Color' {...register('interiorColor')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Exterior Color' placeholder='Exterior Color' {...register('exteriorColor')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Category' placeholder='Category' {...register('category')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Location' placeholder='Location' {...register('location')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Vehicle Type' placeholder='Vehicle Type' {...register('vehicleType')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Services' placeholder='Services' {...register('services')} />
-      </Grid>
-      <Grid item xs={12} sm={6}>
-        <TextField fullWidth label='Description' placeholder='Description' {...register('description')} />
-      </Grid>
+            <FormControl fullWidth>
+                <InputLabel id="colour-label-interior">Interior Colors</InputLabel>
+                <Select
+                  labelId="colour-label-interior"
+                  id="colour-select-interior"
+                  value={selectedColorInterior}
+                  label="colourInterior"
+                  {...register('colourInterior')}
+                  onChange={handleColorChangeInterior}
+                >
+                  <MenuItem value="">Select colour</MenuItem>
+                  {colors.map((color) => (
+                    <MenuItem key={color} value={color} sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}>
+                      <Box display="flex">
+                        <Box sx={{ backgroundColor: color, width: 20, height: 20, }} />
+                        <Typography variant="body2" sx={{ ml: 1, color: color }}>
+                          {color}
+                        </Typography>
+
+                      </Box>
+
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>             </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Exterior Color' placeholder='Exterior Color' {...register('exteriorColor')} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Category' placeholder='Category' {...register('category')} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Location' placeholder='Location' {...register('location')} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Vehicle Type' placeholder='Vehicle Type' {...register('vehicleType')} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Services' placeholder='Services' {...register('services')} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField fullWidth label='Description' placeholder='Description' {...register('description')} />
+            </Grid>
           </Grid>
         </AccordionDetails>
         <Divider sx={{ m: 0 }} />
@@ -301,13 +333,13 @@ const handleImageUpload = (event) => {
           aria-controls='form-layouts-collapsible-content-2'
         >
           <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-         CAR PRICING
+            CAR PRICING
           </Typography>
         </AccordionSummary>
         <Divider sx={{ m: 0 }} />
         <AccordionDetails>
           <Grid container spacing={5}>
-          <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
@@ -335,19 +367,19 @@ const handleImageUpload = (event) => {
               </Accordion>
             </Grid>
             <Grid item xs={12} sm={6}>
-            <Accordion>
+              <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
                   id='variant-sizes-collapsible-header'
                   aria-controls='variant-sizes-collapsible-content'
                 >
                   <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-                   Weekly Charges
+                    Weekly Charges
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={5}>
-                  <Grid item xs={12} sm={3}>
+                    <Grid item xs={12} sm={3}>
                       <TextField fullWidth label='Charge Per Week' placeholder='chargePerWeek' {...register('chargePerWeek')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -360,10 +392,10 @@ const handleImageUpload = (event) => {
                 </AccordionDetails>
               </Accordion>
             </Grid>
-              <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Extra Mileage Cost' placeholder='extraMileageCost' {...register('extraMileageCost')} />
             </Grid>
-              <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='CDW Insurrance Per Day' placeholder='cdwInsurancePerDay' {...register('cdwInsurancePerDay')} />
             </Grid>
           </Grid>
@@ -377,13 +409,13 @@ const handleImageUpload = (event) => {
           aria-controls='form-layouts-collapsible-content-2'
         >
           <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-          RENTAL TERMS
+            RENTAL TERMS
           </Typography>
         </AccordionSummary>
         <Divider sx={{ m: 0 }} />
         <AccordionDetails>
           <Grid container spacing={5}>
-          <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Security Deposit' placeholder='Security Deposit' {...register('securityDeposit')} />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -395,7 +427,7 @@ const handleImageUpload = (event) => {
             <Grid item xs={12} sm={3}>
               <TextField fullWidth label='Special Note for Customers' placeholder='Special Note for Customers' {...register('specialNoteForCustomers')} />
             </Grid>
-            
+
           </Grid>
         </AccordionDetails>
         <Divider sx={{ m: 0 }} />
@@ -408,28 +440,28 @@ const handleImageUpload = (event) => {
           aria-controls='form-layouts-collapsible-content-2'
         >
           <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-         MONTHLY PRICING
+            MONTHLY PRICING
           </Typography>
         </AccordionSummary>
         <Divider sx={{ m: 0 }} />
         <AccordionDetails>
           <Grid container spacing={5}>
-          
-         
+
+
             <Grid item xs={12} sm={6}>
-            <Accordion>
+              <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
                   id='variant-sizes-collapsible-header'
                   aria-controls='variant-sizes-collapsible-content'
                 >
                   <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-                   1 Month Charge
+                    1 Month Charge
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={5}>
-                  <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField fullWidth label='One Month Charge' placeholder='oneMonthCharge' {...register('oneMonthCharge')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -441,20 +473,20 @@ const handleImageUpload = (event) => {
                   </Grid>
                 </AccordionDetails>
               </Accordion>            </Grid>
-              <Grid item xs={12} sm={6}>
-            <Accordion>
+            <Grid item xs={12} sm={6}>
+              <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
                   id='variant-sizes-collapsible-header'
                   aria-controls='variant-sizes-collapsible-content'
                 >
                   <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-                   3 Month Charge
+                    3 Month Charge
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={5}>
-                  <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField fullWidth label='Three Month Charge' placeholder='threeMonthCharge' {...register('threeMonthCharge')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -466,20 +498,20 @@ const handleImageUpload = (event) => {
                   </Grid>
                 </AccordionDetails>
               </Accordion>            </Grid>
-              <Grid item xs={12} sm={6}>
-            <Accordion>
+            <Grid item xs={12} sm={6}>
+              <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
                   id='variant-sizes-collapsible-header'
                   aria-controls='variant-sizes-collapsible-content'
                 >
                   <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-                  6 Month Charge
+                    6 Month Charge
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={5}>
-                  <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField fullWidth label='Six Month Charge' placeholder='sixMonthCharge' {...register('sixMonthCharge')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -491,20 +523,20 @@ const handleImageUpload = (event) => {
                   </Grid>
                 </AccordionDetails>
               </Accordion>            </Grid>
-              <Grid item xs={12} sm={6}>
-            <Accordion>
+            <Grid item xs={12} sm={6}>
+              <Accordion>
                 <AccordionSummary
                   expandIcon={<ChevronDown />}
                   id='variant-sizes-collapsible-header'
                   aria-controls='variant-sizes-collapsible-content'
                 >
                   <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-                   9 Month Charge
+                    9 Month Charge
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container spacing={5}>
-                  <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={6}>
                       <TextField fullWidth label='Nine Month Charge' placeholder='NineMonthCharge' {...register('NineMonthCharge')} />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -521,26 +553,26 @@ const handleImageUpload = (event) => {
         <Divider sx={{ m: 0 }} />
       </Accordion>
 
-<Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
-  <AccordionSummary
-    expandIcon={<ChevronDown />}
-    id='form-layouts-collapsible-header-6'
-    aria-controls='form-layouts-collapsible-content-6'
-  >
-    <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
-      ADD IMAGES
-    </Typography>
-  </AccordionSummary>
-  <Divider sx={{ m: 0 }} />
-  <AccordionDetails>
-    <Grid container spacing={5}>
-    <Grid item xs={12}>
-         
-            <FileUploaderMultiple handleImageUpload={handleImageUpload}/>
-    </Grid>
-    </Grid>
-  </AccordionDetails>
-</Accordion>
+      <Accordion expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
+        <AccordionSummary
+          expandIcon={<ChevronDown />}
+          id='form-layouts-collapsible-header-6'
+          aria-controls='form-layouts-collapsible-content-6'
+        >
+          <Typography variant='subtitle1' sx={{ fontWeight: 500 }}>
+            ADD IMAGES
+          </Typography>
+        </AccordionSummary>
+        <Divider sx={{ m: 0 }} />
+        <AccordionDetails>
+          <Grid container spacing={5}>
+            <Grid item xs={12}>
+
+              <FileUploaderMultiple handleImageUpload={handleImageUpload} />
+            </Grid>
+          </Grid>
+        </AccordionDetails>
+      </Accordion>
 
       <AccordionDetails>
         <Button size='large' type='submit' variant='contained' sx={{ mr: 4 }}>

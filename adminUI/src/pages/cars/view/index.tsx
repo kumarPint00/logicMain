@@ -8,6 +8,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar';
 import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar';
 import { dummyCarData } from 'src/lib/brandAmodels';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+
 const columns: GridColumns = [
   { field: 'name', headerName: 'Name', width: 150 },
   { field: 'brand', headerName: 'Brand', width: 150 },
@@ -50,7 +51,7 @@ const CarTable = () => {
   const [total, setTotal] = useState<number>(0);
   const [sort, setSort] = useState('asc');
   const [pageSize, setPageSize] = useState(7);
-  const [rows, setRows] = useState(dummyCarData);
+  const [rows, setRows] = useState([]);
   console.log("🚀 ~ CarTable ~ rows:", rows)
   const [searchValue, setSearchValue] = useState('');
   const [sortColumn, setSortColumn] = useState('name');
@@ -62,27 +63,27 @@ const CarTable = () => {
     return data.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
   }
 
-  // const fetchTableData = useCallback(
-  //   async (sort: string, q: string, column: string) => {
-  //     await axios
-  // .get('/api/cars', {
-  //         params: {
-  //           q,
-  //           sort,
-  //           column,
-  //         },
-  //       })
-  // .then((res) => {
-  //         setTotal(res.data.total);
-  //         setRows(loadServerRows(page, res.data.data));
-  //       });
-  //   },
-  //   [page, pageSize]
-  // );
+  const fetchTableData = useCallback(
+    async (sort: string, q: string, column: string) => {
+      await axios
+  .get('/api/cars', {
+          params: {
+            q,
+            sort,
+            column,
+          },
+        })
+  .then((res) => {
+          setTotal(res.data.total);
+          setRows(loadServerRows(page, res.data.data));
+        });
+    },
+    [page, pageSize]
+  );
 
-  // useEffect(() => {
-  //   fetchTableData(sort, searchValue, sortColumn);
-  // }, [fetchTableData, searchValue, sort, sortColumn]);
+  useEffect(() => {
+    fetchTableData(sort, searchValue, sortColumn);
+  }, [fetchTableData, searchValue, sort, sortColumn]);
 
   const handleSortModel = (newModel: any) => {
     if (newModel.length) {
