@@ -8,7 +8,8 @@ import CustomAvatar from 'src/@core/components/mui/avatar';
 import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar';
 import { dummyCarData } from 'src/lib/brandAmodels';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
-
+import { useRouter } from 'next/router';
+import { redirect } from 'react-router-dom';
 const columns: GridColumns = [
   { field: 'name', headerName: 'Name', width: 150 },
   { field: 'brand', headerName: 'Brand', width: 150 },
@@ -49,6 +50,7 @@ const columns: GridColumns = [
 const CarTable = () => {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState<number>(0);
+  const Router = useRouter()
   const [sort, setSort] = useState('asc');
   const [pageSize, setPageSize] = useState(7);
   const [rows, setRows] = useState([]);
@@ -66,7 +68,7 @@ const CarTable = () => {
   const fetchTableData = useCallback(
     async (sort: string, q: string, column: string) => {
       await axios
-  .get('/api/cars', {
+  .get('http://localhost:8000/api/v1/admin/getAllCars', {
           params: {
             q,
             sort,
@@ -111,9 +113,17 @@ const CarTable = () => {
     setMessage(`Movie "${params.row.title}" clicked`);
     setSelectedRow(params.row);
     setOpen(true);
+
   };
   
-
+  const handleDoubleClick: GridEventListener<'rowDoubleClick'> = (
+    params,
+    event, 
+    details,
+  ) => {
+    console.log('row double clicked', params, event, details);
+    Router.push(`/cars/update/${params.row._id}`); 
+  };
   const handleClose = () => {
     setOpen(false);
   };
@@ -121,7 +131,7 @@ const CarTable = () => {
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={rows.map(row => ({...row, id: row._id }))}
         columns={columns}
         pageSize={pageSize}
         sortingMode="server"
@@ -139,6 +149,7 @@ const CarTable = () => {
           },
         }}
         onRowClick={handleEvent}
+        onRowDoubleClick={handleDoubleClick}
       />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Car Details</DialogTitle>

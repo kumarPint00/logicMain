@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useRef, useState } from 'react'
+import { SyntheticEvent, useRef, useState , useEffect} from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -28,7 +28,7 @@ import { FormControl } from '@mui/material'
 import { brandsAndModels, colors } from 'src/lib/brandAmodels'
 import FileUploaderMultiple from './ImageGrid'
 
-const CarAddition = () => {
+const ViewCarAddition = ({ params }: any) => {
   const { register, handleSubmit } = useForm();
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -40,6 +40,22 @@ const CarAddition = () => {
   const [selectedColorExterior, setSelectedColorExterior] = useState('');
   const [preview, setPreview] = useState(null);
   const [cruiseControl, setCruiseControl] = useState(false);
+
+  const [carData, setCarData] = useState({});
+  console.log("🚀 ~ ViewCarAddition ~ carData:", params)
+  const { _id } = params?.params;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/v1/admin/getCarById/${id}`);
+        setCarData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
 
   const hiddenInputRef = useRef();
 
@@ -78,7 +94,7 @@ const onSubmit = async (data: any) => {
     formData.append('carImages', imagePreviewUrl); // Ensure the file is appended correctly
     formData.append('cruiseControl', cruiseControl);
 
-    const response = await axios.post('http://localhost:8000/api/v1/admin/createNewCar', formData, {
+    const response = await axios.post('http://localhost:8000/api/v1/admin/getCarById/_id', formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -674,4 +690,4 @@ const onSubmit = async (data: any) => {
   );
 };
 
-export default CarAddition;
+export default ViewCarAddition;

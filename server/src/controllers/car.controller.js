@@ -12,7 +12,6 @@ import { sendWhatsAppmessage } from "../utils/sms.service.js";
 
 const createCar = asyncHandler(async (req, res) => {
   const {
-    name,
     brand,
     model,
     interiorColor,
@@ -49,22 +48,26 @@ const createCar = asyncHandler(async (req, res) => {
     pushButton,
     lcd,
     rearCamera,
-    imageType
+    imageType,
+    image
   } = req.body;
+  console.log("🚀 ~ createCar ~ req.body:", req.body)
+  const name = brand + " " + model;
+  
   const carImagePath = req.files?.carImages[0]?.path;
 
-  // if (!carImagePath) {
-  //   throw new ApiError(400, "Car image is required");
-  // }
-  // const carImage = await uploadOnCloudinary(carImagePath);
-  // if (!carImage) {
-  //   throw new ApiError(400, "Car image upload failed");
-  // }
+  if (!carImagePath) {
+    throw new ApiError(400, "Car image is required");
+  }
+  const carImage = await uploadOnCloudinary(carImagePath);
+  if (!carImage) {
+    throw new ApiError(400, "Car image upload failed");
+  }
 
-  // const carImages = await CarImages.create({
-  //   imageUrl: carImage.url,
-  //   imageType: imageType,
-  // })
+  const carImages = await CarImages.create({
+    imageUrl: carImage.url,
+    imageType: imageType,
+  })
 
   const carFeatures = await CarFeature.create({
     transmission,
@@ -114,7 +117,7 @@ const createCar = asyncHandler(async (req, res) => {
     },
     packageDetails: carPackage._id,
     carFeatures: carFeatures._id,
-    // carImages: carImages._id,
+    carImages: carImages._id,
   });
 
   const createdCar = await Car.findOne(car._id).populate("carFeatures").populate("packageDetails").populate("carImages").select('-_id -__v')

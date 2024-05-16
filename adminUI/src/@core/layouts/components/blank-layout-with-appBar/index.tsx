@@ -32,7 +32,7 @@ const BlankLayoutAppBar = () => {
       >
         <Link href='/' passHref>
           <StyledLink>
-            {/* <svg
+            <svg
               width={30}
               height={25}
               version='1.1'
@@ -90,7 +90,8 @@ const BlankLayoutAppBar = () => {
                   </g>
                 </g>
               </g>
-            </svg> */}
+            </svg>
+            
             <Typography
               variant='h6'
               sx={{

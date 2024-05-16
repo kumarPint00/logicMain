@@ -71,10 +71,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Add Car',
           path: '/cars/add'
         },
-        {
-          title: 'Update Car',
-          path: '/cars/update'
-        }
+        
+        // {
+        //   title: 'Update Car',
+        //   path: '/cars/update'
+        // }
       ]
     },  {
       title: 'Enquiry',
