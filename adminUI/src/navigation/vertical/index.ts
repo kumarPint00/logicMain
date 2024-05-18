@@ -1,5 +1,5 @@
 // ** Icon imports
-import { Eye } from "@medusajs/icons"
+import { Eye } from '@medusajs/icons'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
@@ -30,6 +30,12 @@ import EmojiTransportationIcon from '@mui/icons-material/EmojiTransportation'
 import LocalOfferIcon from '@mui/icons-material/LocalOffer'
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd'
 import SettingsIcon from '@mui/icons-material/Settings'
+import NewReleasesIcon from '@mui/icons-material/NewReleases'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
+import DangerousOutlinedIcon from '@mui/icons-material/DangerousOutlined'
+import UpgradeOutlinedIcon from '@mui/icons-material/UpgradeOutlined'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -49,11 +55,13 @@ const navigation = (): VerticalNavItemsType => {
         },
 
         {
-          title: 'Equiry',
+          title: 'Enquiry',
+          icon: NewReleasesIcon,
           path: '/dashboards/analytics'
         },
         {
           title: 'User',
+          icon: AccountCircleIcon,
           path: '/dashboards/ecommerce'
         }
       ]
@@ -69,15 +77,17 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Car',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/cars/add'
-        },
-        
+        }
+
         // {
         //   title: 'Update Car',
         //   path: '/cars/update'
         // }
       ]
-    },  {
+    },
+    {
       title: 'Enquiry',
       icon: NotificationAddIcon,
       children: [
@@ -88,10 +98,12 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Accepted Enquiry',
+          icon: CheckCircleOutlinedIcon,
           path: '/enquiry/accepted'
         },
         {
           title: 'Rejected Enquiry',
+          icon: DangerousOutlinedIcon,
           path: '/enquiry/rejected'
         }
       ]
@@ -107,10 +119,12 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Address',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/addresses/add'
         },
         {
           title: 'Update Address',
+          icon: UpgradeOutlinedIcon,
           path: '/addresses/update'
         }
       ]
@@ -126,14 +140,17 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Branch',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/branches/add'
         },
         {
           title: 'Update Branch',
+          icon: UpgradeOutlinedIcon,
           path: '/branches/update'
         }
       ]
-    }, {
+    },
+    {
       title: 'Promotion',
       icon: LocalOfferIcon,
       children: [
@@ -144,15 +161,17 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Promotion',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/promotion/add'
         },
         {
           title: 'Update Promotion',
+          icon: UpgradeOutlinedIcon,
           path: '/promotion/update'
         }
       ]
     },
-   
+
     {
       title: 'Offer',
       icon: DiscountIcon,
@@ -164,15 +183,17 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Offer',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/offers/add'
         },
         {
           title: 'Update Offer',
+          icon: UpgradeOutlinedIcon,
           path: '/offers/update'
         }
       ]
     },
-    
+
     {
       title: 'Transactions',
       icon: AccountBalanceWalletIcon,
@@ -184,10 +205,12 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Transactions',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/transactions/add'
         },
         {
           title: 'Update Transactions',
+          icon: UpgradeOutlinedIcon,
           path: '/transactions/update'
         }
       ]
@@ -203,15 +226,16 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Add Settings',
+          icon: AddCircleOutlineOutlinedIcon,
           path: '/settings/add'
         },
         {
           title: 'Update Settings',
+          icon: UpgradeOutlinedIcon,
           path: '/settings/update'
         }
       ]
-    },
-  
+    }
 
     // {
     //   sectionTitle: 'Apps & Pages'
