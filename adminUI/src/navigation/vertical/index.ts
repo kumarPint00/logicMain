@@ -49,12 +49,13 @@ const navigation = (): VerticalNavItemsType => {
       badgeColor: 'error',
       children: [
         {
-          title: 'Car',
+          title: 'Summary Statistics',
           icon: DashboardIcon,
-          path: '/dashboards/crm'
+          path: '/dashboards/cars'
         },
 
         {
+<<<<<<< HEAD
           title: 'Enquiry',
           icon: NewReleasesIcon,
           path: '/dashboards/analytics'
@@ -63,6 +64,14 @@ const navigation = (): VerticalNavItemsType => {
           title: 'User',
           icon: AccountCircleIcon,
           path: '/dashboards/ecommerce'
+=======
+          title: 'Recent Activities',
+          path: '/dashboards/enquiries'
+        },
+        {
+          title: 'Alerts & Notifications',
+          path: '/dashboards/users'
+>>>>>>> 184f409 (backend integration)
         }
       ]
     },
@@ -130,15 +139,36 @@ const navigation = (): VerticalNavItemsType => {
       ]
     },
     {
-      title: 'Branch',
-      icon: EmojiTransportationIcon,
+      title: 'User Management',
+      icon: BusinessIcon,
       children: [
         {
           icon: Eye,
-          title: 'View Branch',
-          path: '/branches/view'
+          title: 'Admin and Staff',
+          children:[
+            {
+              title: 'Add Staff',
+            path: '/admin/staff/create',
+            },
+            {
+              title: 'View Staff',
+            path: '/admin/staff/view',
+            },
+            {
+              title: 'Update Staff',
+            path: '/admin/staff/update',
+            },
+            {
+              title:'Role-based access control (RBAC).',
+              path:'/admin/staff/rbac'
+            }
+
+          ],
+
+          
         },
         {
+<<<<<<< HEAD
           title: 'Add Branch',
           icon: AddCircleOutlineOutlinedIcon,
           path: '/branches/add'
@@ -168,10 +198,52 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Update Promotion',
           icon: UpgradeOutlinedIcon,
           path: '/promotion/update'
+=======
+          title:'Customer',
+          children:[
+            {
+              title: 'View customer profiles',
+              path: '/admin/customer/view'
+            },
+            {
+              title: 'Booking history',
+              path: '/admin/customer/bookingHistory'
+            }
+          ]
+>>>>>>> 184f409 (backend integration)
         }
+       
       ]
     },
+<<<<<<< HEAD
 
+=======
+    {
+      title: 'Marketing Tools',
+      icon: BusinessIcon,
+      children: [
+        {
+          title: 'Promotion',
+          icon: LocalOfferIcon,
+          children: [
+            {
+              icon: Eye,
+              title: 'View Promotion',
+              path: '/promotion/view'
+            },
+            {
+              title: 'Add Promotion',
+              path: '/promotion/add'
+            },
+            {
+              title: 'Update Promotion',
+              path: '/promotion/update'
+            }
+          ]
+        },
+
+        
+>>>>>>> 184f409 (backend integration)
     {
       title: 'Offer',
       icon: DiscountIcon,
@@ -193,7 +265,39 @@ const navigation = (): VerticalNavItemsType => {
         }
       ]
     },
+<<<<<<< HEAD
 
+=======
+    
+       
+      ]
+    },
+    
+
+    {
+      title: 'Branch',
+      icon: EmojiTransportationIcon,
+      children: [
+        {
+          icon: Eye,
+          title: 'View Branch',
+          path: '/branches/view'
+        },
+        {
+          title: 'Add Branch',
+          path: '/branches/add'
+        },
+        {
+          title: 'Update Branch',
+          path: '/branches/update'
+        }
+      ]
+    }, 
+  
+    
+ 
+ 
+>>>>>>> 184f409 (backend integration)
     {
       title: 'Transactions',
       icon: AccountBalanceWalletIcon,

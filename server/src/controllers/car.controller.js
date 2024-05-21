@@ -9,6 +9,8 @@ import {
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { sendEmailNotification } from "../utils/notification.service.js";
 import { sendWhatsAppmessage } from "../utils/sms.service.js";
+import { ObjectId } from "mongodb";
+
 
 const createCar = asyncHandler(async (req, res) => {
   const {
@@ -155,7 +157,13 @@ const getAllCars = asyncHandler(async (req, res) => {
 
 const getCarById = asyncHandler(async (req, res) => {
   const carId = req.params.id;
-  const car = await Car.findOne(carId).populate("carFeatures").populate("packageDetails").populate("carImages");
+  if (!ObjectId.isValid(carId)) {
+    throw new ApiError(400, "Invalid car id");
+  }
+
+  const carIdObjectId = new ObjectId(carId);
+  
+  const car = await Car.findOne(carIdObjectId).populate("carFeatures").populate("packageDetails").populate("carImages");
   if (!car) {
     throw new ApiError(404, "Car not found");
   }
