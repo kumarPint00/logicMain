@@ -27,9 +27,12 @@ import axios from 'axios'
 import { FormControl } from '@mui/material'
 import { brandsAndModels, colors } from 'src/lib/brandAmodels'
 import FileUploaderMultiple from './ImageGrid'
+import { useRouter } from 'next/router'
 
 const CarAddition = () => {
   const { register, handleSubmit } = useForm();
+  const Router = useRouter();
+
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
@@ -87,6 +90,7 @@ const onSubmit = async (data: any) => {
     toast.success('Car created successfully!', {
       position: 'bottom-right',
     });
+    Router.push('/cars/view');
 
     console.log(response.data);
   } catch (error) {

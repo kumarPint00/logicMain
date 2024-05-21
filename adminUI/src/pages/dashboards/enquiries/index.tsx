@@ -29,7 +29,7 @@ import CrmActivityTimeline from 'src/views/dashboards/crm/CrmActivityTimeline'
 const data: CardStatsCharacterProps[] = [
   {
     stats: '13.7k',
-    title: 'Ratings',
+    title: 'Recent bookings.',
     trendNumber: '+38%',
     chipColor: 'primary',
     chipText: 'Year of 2022',
@@ -38,7 +38,25 @@ const data: CardStatsCharacterProps[] = [
   {
     stats: '24.5k',
     trend: 'negative',
-    title: 'Sessions',
+    title: 'Latest added cars',
+    trendNumber: '-22%',
+    chipText: 'Last Week',
+    chipColor: 'secondary',
+    src: '/images/cards/pose_m18.png'
+  },
+  {
+    stats: '24.5k',
+    trend: 'negative',
+    title: 'Recent customer feedback',
+    trendNumber: '-22%',
+    chipText: 'Last Week',
+    chipColor: 'secondary',
+    src: '/images/cards/pose_m18.png'
+  },
+  {
+    stats: '24.5k',
+    trend: 'negative',
+    title: 'Customer statistics',
     trendNumber: '-22%',
     chipText: 'Last Week',
     chipColor: 'secondary',
@@ -56,7 +74,13 @@ const CRMDashboard = () => {
         <Grid item xs={12} sm={6} md={3} sx={{ pt: theme => `${theme.spacing(12.25)} !important` }}>
           <CardStatisticsCharacter data={data[1]} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} sm={6} md={3} sx={{ pt: theme => `${theme.spacing(12.25)} !important` }}>
+          <CardStatisticsCharacter data={data[2]} />
+        </Grid>
+        {/* <Grid item xs={12} sm={6} md={3} sx={{ pt: theme => `${theme.spacing(12.25)} !important` }}>
+          <CardStatisticsCharacter data={data[3]} />
+        </Grid> */}
+        {/* <Grid item xs={12} md={6}>
           <CrmStatisticsCard />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -94,7 +118,7 @@ const CRMDashboard = () => {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
         {/* <Grid item xs={12} md={6} lg={4}>
           <CrmUpgradePlan />
         </Grid>

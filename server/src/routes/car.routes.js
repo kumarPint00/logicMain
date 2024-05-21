@@ -35,7 +35,7 @@ router.route("/getCarsByPriceRange").get(getCarsByPriceRange);
 router.route("/getCarsBySegment").get(getCarsBySegment);
 
 //secured routes
-router.route("/updateCarById/:id").patch(verifyJWT, updateCarById);
-router.route("/deleteCarById/:id").delete(verifyJWT, deleteCarById);
+router.route("/updateCarById/:id").patch( updateCarById);
+router.route("/deleteCarById/:id").delete( deleteCarById);
 
 export default router;
