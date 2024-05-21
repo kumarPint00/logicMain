@@ -64,7 +64,7 @@ const data: CardStatsCharacterProps[] = [
   }
 ]
 
-const CRMDashboard = () => {
+const CarDashBoard = () => {
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
@@ -133,4 +133,4 @@ const CRMDashboard = () => {
   )
 }
 
-export default CRMDashboard
+export default CarDashBoard
