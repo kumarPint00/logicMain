@@ -86,6 +86,7 @@ const onSubmit = async (data: any) => {
         'Content-Type': 'multipart/form-data'
       }
     });
+    console.log("🚀 ~ onSubmit ~ response:", response)
 
     toast.success('Car created successfully!', {
       position: 'bottom-right',

@@ -1,360 +1,244 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { DataGrid, GridColumns } from '@mui/x-data-grid';
+import Box from '@mui/material/Box';
+import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Typography } from '@mui/material';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { classNames } from 'primereact/utils';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { ProductService } from '../service/ProductService';
-import { Toast } from 'primereact/toast';
-import { Button } from 'primereact/button';
-import { FileUpload } from 'primereact/fileupload';
-import { Rating } from 'primereact/rating';
-import { Toolbar } from 'primereact/toolbar';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { RadioButton } from 'primereact/radiobutton';
-import { InputNumber } from 'primereact/inputnumber';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { Tag } from 'primereact/tag';
+const columns: GridColumns = [
+  { field: 'name', headerName: 'Name', width: 150 },
+  { field: 'carName', headerName: 'Car Name', width: 150 },
+  { field: 'startDate', headerName: 'Start Date', width: 150 },
+  { field: 'isNewEnquiry', headerName: 'New Enquiry', width: 150 },
+  { field: 'endDate', headerName: 'End Date', width: 150 },
+  { field: 'pickUpLoc', headerName: 'Pick Up Location', width: 200 },
+  { field: 'dropLocation', headerName: 'Drop Location', width: 200 },
+  { field: 'phoneNumber', headerName: 'Phone Number', width: 150 },
+  { field: 'area', headerName: 'Area', width: 150 },
+  { field: 'message', headerName: 'Message', width: 200 },
+  { field: 'deliveryMode', headerName: 'Delivery Mode', width: 150 },
+  { field: 'city', headerName: 'City', width: 150 },
+  { field: 'email', headerName: 'Email', width: 150 },
+  { field: 'packages', headerName: 'Packages', width: 150 },
+  { field: 'brand', headerName: 'Brand', width: 150 },
+  { field: 'model', headerName: 'Model', width: 150 },
+  { field: 'enquiryType', headerName: 'Enquiry Type', width: 150 },
+  { field: 'preferredContact', headerName: 'Preferred Contact', width: 150 },
+  { field: 'budget', headerName: 'Budget', width: 150 },
+  { field: 'additionalRequirements', headerName: 'Additional Requirements', width: 200 },
+  { field: 'source', headerName: 'Source', width: 150 },
+  { field: 'promotionalCode', headerName: 'Promotional Code', width: 150 },
+  { field: 'preferredLanguage', headerName: 'Preferred Language', width: 150 },
+  { field: 'currentEnquiryStatus', headerName: 'Current Enquiry Status', width: 200 },
+  { field: 'enquiryStatus', headerName: 'Enquiry Status', width: 150 },
+  { field: 'bookingCreated', headerName: 'Booking Created', width: 200 },
+  { field: 'bookingUpdated', headerName: 'Booking Updated', width: 200 },
+];
 
-export default function ProductsDemo() {
-    let emptyProduct = {
-        id: null,
-        name: '',
-        image: null,
-        description: '',
-        category: null,
-        price: 0,
-        quantity: 0,
-        rating: 0,
-        inventoryStatus: 'INSTOCK'
-    };
+const EnquiryTable = () => {
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState<number>(0);
+  const [sort, setSort] = useState('asc');
+  const [pageSize, setPageSize] = useState(7);
+  const [rows, setRows] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [sortColumn, setSortColumn] = useState('name');
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
-    const [products, setProducts] = useState(null);
-    const [productDialog, setProductDialog] = useState(false);
-    const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-    const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-    const [product, setProduct] = useState(emptyProduct);
-    const [selectedProducts, setSelectedProducts] = useState(null);
-    const [submitted, setSubmitted] = useState(false);
-    const [globalFilter, setGlobalFilter] = useState(null);
-    const toast = useRef(null);
-    const dt = useRef(null);
+  function loadServerRows(currentPage: number, data: any[]) {
+    return data.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
+  }
 
-    useEffect(() => {
-        ProductService.getProducts().then((data) => setProducts(data));
-    }, []);
+  const fetchTableData = useCallback(
+    async (sort: string, q: string, column: string) => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/v1/user/getAllAcceptedEnquiries', {
+          params: {
+            q,
+            sort,
+            column,
+          },
+        });
+        setTotal(response.data.total);
+        setRows(loadServerRows(page, response.data.data));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+    [page, pageSize]
+  );
 
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
+  useEffect(() => {
+    fetchTableData(sort, searchValue, sortColumn);
+  }, [fetchTableData, searchValue, sort, sortColumn]);
 
-    const openNew = () => {
-        setProduct(emptyProduct);
-        setSubmitted(false);
-        setProductDialog(true);
-    };
+  const handleSortModel = (newModel: any) => {
+    if (newModel.length) {
+      setSort(newModel[0].sort);
+      setSortColumn(newModel[0].field);
+      fetchTableData(newModel[0].sort, searchValue, newModel[0].field);
+    } else {
+      setSort('asc');
+      setSortColumn('name');
+    }
+  };
 
-    const hideDialog = () => {
-        setSubmitted(false);
-        setProductDialog(false);
-    };
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+    fetchTableData(sort, value, sortColumn);
+  };
 
-    const hideDeleteProductDialog = () => {
-        setDeleteProductDialog(false);
-    };
+  const handleRowClick = (params) => {
+    setSelectedRow(params.row);
+    setOpenDialog(true);
+  };
 
-    const hideDeleteProductsDialog = () => {
-        setDeleteProductsDialog(false);
-    };
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setSelectedRow(null);
+  };
 
-    const saveProduct = () => {
-        setSubmitted(true);
+  const handleEnquiryStatusChange = async (status) => {
+    if (selectedRow) {
+      const updatedEnquiry = {
+        ...selectedRow,
+        currentEnquiryStatus: status === 'Accepted' ? 'Accepted' : 'Rejected',
+        enquiryStatus: status === 'Accepted',
+      };
+      
+      try {
+        await axios.put(`http://localhost:8000/api/v1/user/updateEnquiry/${selectedRow._id}`, updatedEnquiry);
 
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
 
-            if (product.id) {
-                const index = findIndexById(product.id);
+        fetchTableData(sort, searchValue, sortColumn);
+        handleDialogClose();
+      } catch (error) {
+        console.error('Error updating enquiry:', error);
+      }
+    }
+  };
 
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                _product.id = createId();
-                _product.image = 'product-placeholder.svg';
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
+  return (
+    <Box sx={{ height: 400, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={pageSize}
+        sortingMode="server"
+        paginationMode="server"
+        onSortModelChange={handleSortModel}
+        rowsPerPageOptions={[7, 10, 25, 50]}
+        onPageChange={(newPage) => setPage(newPage)}
+        components={{ Toolbar: ServerSideToolbar }}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        getRowId={(row) => row._id}
+        componentsProps={{
+          toolbar: {
+            value: searchValue,
+            clearSearch: () => handleSearch(''),
+            onChange: (event: any) => handleSearch(event.target.value),
+          },
+        }}
+        onRowClick={handleRowClick}
+      />
+      <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
+        <DialogTitle>Enquiry Details</DialogTitle>
+        <DialogContent>
+          {selectedRow && (
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Name:</strong> {selectedRow.name}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Car Name:</strong> {selectedRow.carName}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Start Date:</strong> {new Date(selectedRow.startDate).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>End Date:</strong> {new Date(selectedRow.endDate).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Pick Up Location:</strong> {selectedRow.pickUpLoc}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Drop Location:</strong> {selectedRow.dropLocation}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Phone Number:</strong> {selectedRow.phoneNumber}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Email:</strong> {selectedRow.email}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Area:</strong> {selectedRow.area}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Message:</strong> {selectedRow.message}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Delivery Mode:</strong> {selectedRow.deliveryMode}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>City:</strong> {selectedRow.city}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Packages:</strong> {selectedRow.packages}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Brand:</strong> {selectedRow.brand}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Model:</strong> {selectedRow.model}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Enquiry Type:</strong> {selectedRow.enquiryType}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Preferred Contact:</strong> {selectedRow.preferredContact}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Budget:</strong> {selectedRow.budget}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Additional Requirements:</strong> {selectedRow.additionalRequirements}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Source:</strong> {selectedRow.source}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Promotional Code:</strong> {selectedRow.promotionalCode}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Preferred Language:</strong> {selectedRow.preferredLanguage}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Current Enquiry Status:</strong> {selectedRow.currentEnquiryStatus}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Enquiry Status:</strong> {selectedRow.enquiryStatus ? 'Active' : 'Inactive'}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Booking Created:</strong> {new Date(selectedRow.bookingCreated).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Booking Updated:</strong> {new Date(selectedRow.bookingUpdated).toLocaleDateString()}</Typography>
+              </Grid>
+            </Grid>
+          )}
+        </DialogContent>
+        {/* <DialogActions>
+          <Button onClick={() => handleEnquiryStatusChange('Accepted')} color="primary">
+            Accept
+          </Button>
+          <Button onClick={() => handleEnquiryStatusChange('Rejected')} color="secondary">
+            Reject
+          </Button>
+        </DialogActions> */}
+      </Dialog>
+    </Box>
+  );
+};
 
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
-        }
-    };
-
-    const editProduct = (product) => {
-        setProduct({ ...product });
-        setProductDialog(true);
-    };
-
-    const confirmDeleteProduct = (product) => {
-        setProduct(product);
-        setDeleteProductDialog(true);
-    };
-
-    const deleteProduct = () => {
-        let _products = products.filter((val) => val.id !== product.id);
-
-        setProducts(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-    };
-
-    const findIndexById = (id) => {
-        let index = -1;
-
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
-
-    const createId = () => {
-        let id = '';
-        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-
-        return id;
-    };
-
-    const exportCSV = () => {
-        dt.current.exportCSV();
-    };
-
-    const confirmDeleteSelected = () => {
-        setDeleteProductsDialog(true);
-    };
-
-    const deleteSelectedProducts = () => {
-        let _products = products.filter((val) => !selectedProducts.includes(val));
-
-        setProducts(_products);
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
-        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-    };
-
-    const onCategoryChange = (e) => {
-        let _product = { ...product };
-
-        _product['category'] = e.value;
-        setProduct(_product);
-    };
-
-    const onInputChange = (e, name) => {
-        const val = (e.target && e.target.value) || '';
-        let _product = { ...product };
-
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
-
-    const onInputNumberChange = (e, name) => {
-        const val = e.value || 0;
-        let _product = { ...product };
-
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
-
-    const leftToolbarTemplate = () => {
-        return (
-            <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
-            </div>
-        );
-    };
-
-    const rightToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
-    };
-
-    const imageBodyTemplate = (rowData) => {
-        return <img src={`https://primefaces.org/cdn/primereact/images/product/${rowData.image}`} alt={rowData.image} className="shadow-2 border-round" style={{ width: '64px' }} />;
-    };
-
-    const priceBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.price);
-    };
-
-    const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    };
-
-    const statusBodyTemplate = (rowData) => {
-        return <Tag value={rowData.inventoryStatus} severity={getSeverity(rowData)}></Tag>;
-    };
-
-    const actionBodyTemplate = (rowData) => {
-        return (
-            <React.Fragment>
-                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteProduct(rowData)} />
-            </React.Fragment>
-        );
-    };
-
-    const getSeverity = (product) => {
-        switch (product.inventoryStatus) {
-            case 'INSTOCK':
-                return 'success';
-
-            case 'LOWSTOCK':
-                return 'warning';
-
-            case 'OUTOFSTOCK':
-                return 'danger';
-
-            default:
-                return null;
-        }
-    };
-
-    const header = (
-        <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
-            <h4 className="m-0">Manage Products</h4>
-            <IconField iconPosition="left">
-                <InputIcon className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
-            </IconField>
-        </div>
-    );
-    const productDialogFooter = (
-        <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" onClick={saveProduct} />
-        </React.Fragment>
-    );
-    const deleteProductDialogFooter = (
-        <React.Fragment>
-            <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteProductDialog} />
-            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteProduct} />
-        </React.Fragment>
-    );
-    const deleteProductsDialogFooter = (
-        <React.Fragment>
-            <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteProductsDialog} />
-            <Button label="Yes" icon="pi pi-check" severity="danger" onClick={deleteSelectedProducts} />
-        </React.Fragment>
-    );
-
-    return (
-        <div>
-            <Toast ref={toast} />
-            <div className="card">
-                <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
-
-                <DataTable ref={dt} value={products} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
-                        dataKey="id"  paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" globalFilter={globalFilter} header={header}>
-                    <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="code" header="Code" sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
-                    <Column field="image" header="Image" body={imageBodyTemplate}></Column>
-                    <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
-                    <Column field="category" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
-                    <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="inventoryStatus" header="Status" body={statusBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
-                </DataTable>
-            </div>
-
-            <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                {product.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.image} className="product-image block m-auto pb-3" />}
-                <div className="field">
-                    <label htmlFor="name" className="font-bold">
-                        Name
-                    </label>
-                    <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                    {submitted && !product.name && <small className="p-error">Name is required.</small>}
-                </div>
-                <div className="field">
-                    <label htmlFor="description" className="font-bold">
-                        Description
-                    </label>
-                    <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
-                </div>
-
-                <div className="field">
-                    <label className="mb-3 font-bold">Category</label>
-                    <div className="formgrid grid">
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="formgrid grid">
-                    <div className="field col">
-                        <label htmlFor="price" className="font-bold">
-                            Price
-                        </label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                    </div>
-                    <div className="field col">
-                        <label htmlFor="quantity" className="font-bold">
-                            Quantity
-                        </label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
-                    </div>
-                </div>
-            </Dialog>
-
-            <Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    {product && (
-                        <span>
-                            Are you sure you want to delete <b>{product.name}</b>?
-                        </span>
-                    )}
-                </div>
-            </Dialog>
-
-            <Dialog visible={deleteProductsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    {product && <span>Are you sure you want to delete the selected products?</span>}
-                </div>
-            </Dialog>
-        </div>
-    );
-}
-        
+export default EnquiryTable;

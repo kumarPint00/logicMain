@@ -55,23 +55,12 @@ const navigation = (): VerticalNavItemsType => {
         },
 
         {
-<<<<<<< HEAD
-          title: 'Enquiry',
-          icon: NewReleasesIcon,
-          path: '/dashboards/analytics'
-        },
-        {
-          title: 'User',
-          icon: AccountCircleIcon,
-          path: '/dashboards/ecommerce'
-=======
           title: 'Recent Activities',
           path: '/dashboards/enquiries'
         },
         {
           title: 'Alerts & Notifications',
           path: '/dashboards/users'
->>>>>>> 184f409 (backend integration)
         }
       ]
     },
@@ -168,37 +157,6 @@ const navigation = (): VerticalNavItemsType => {
           
         },
         {
-<<<<<<< HEAD
-          title: 'Add Branch',
-          icon: AddCircleOutlineOutlinedIcon,
-          path: '/branches/add'
-        },
-        {
-          title: 'Update Branch',
-          icon: UpgradeOutlinedIcon,
-          path: '/branches/update'
-        }
-      ]
-    },
-    {
-      title: 'Promotion',
-      icon: LocalOfferIcon,
-      children: [
-        {
-          icon: Eye,
-          title: 'View Promotion',
-          path: '/promotion/view'
-        },
-        {
-          title: 'Add Promotion',
-          icon: AddCircleOutlineOutlinedIcon,
-          path: '/promotion/add'
-        },
-        {
-          title: 'Update Promotion',
-          icon: UpgradeOutlinedIcon,
-          path: '/promotion/update'
-=======
           title:'Customer',
           children:[
             {
@@ -210,14 +168,10 @@ const navigation = (): VerticalNavItemsType => {
               path: '/admin/customer/bookingHistory'
             }
           ]
->>>>>>> 184f409 (backend integration)
         }
        
       ]
     },
-<<<<<<< HEAD
-
-=======
     {
       title: 'Marketing Tools',
       icon: BusinessIcon,
@@ -243,7 +197,6 @@ const navigation = (): VerticalNavItemsType => {
         },
 
         
->>>>>>> 184f409 (backend integration)
     {
       title: 'Offer',
       icon: DiscountIcon,
@@ -265,9 +218,6 @@ const navigation = (): VerticalNavItemsType => {
         }
       ]
     },
-<<<<<<< HEAD
-
-=======
     
        
       ]
@@ -297,7 +247,6 @@ const navigation = (): VerticalNavItemsType => {
     
  
  
->>>>>>> 184f409 (backend integration)
     {
       title: 'Transactions',
       icon: AccountBalanceWalletIcon,

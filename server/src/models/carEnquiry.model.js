@@ -24,6 +24,8 @@ const EnquirySchema = new mongoose.Schema({
     source: { type: String, default:"injazrent.ae" },
     promotionalCode: { type: String },
     preferredLanguage: { type: String },
+    currentEnquiryStatus: { type: String },
+    enquiryStatus: { type: Boolean , default: true},
     bookingCreated: { type: Date },
     bookingUpdated: { type: Date }
 });

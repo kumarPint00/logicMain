@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { DataGrid, GridColumns, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColumns } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CustomChip from 'src/@core/components/mui/chip';
-import CustomAvatar from 'src/@core/components/mui/avatar';
 import ServerSideToolbar from 'src/views/table/data-grid/ServerSideToolbar';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Typography } from '@mui/material';
 
 const columns: GridColumns = [
   { field: 'name', headerName: 'Name', width: 150 },
@@ -31,6 +29,8 @@ const columns: GridColumns = [
   { field: 'source', headerName: 'Source', width: 150 },
   { field: 'promotionalCode', headerName: 'Promotional Code', width: 150 },
   { field: 'preferredLanguage', headerName: 'Preferred Language', width: 150 },
+  { field: 'currentEnquiryStatus', headerName: 'Current Enquiry Status', width: 200 },
+  { field: 'enquiryStatus', headerName: 'Enquiry Status', width: 150 },
   { field: 'bookingCreated', headerName: 'Booking Created', width: 200 },
   { field: 'bookingUpdated', headerName: 'Booking Updated', width: 200 },
 ];
@@ -43,6 +43,8 @@ const EnquiryTable = () => {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [sortColumn, setSortColumn] = useState('name');
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
 
   function loadServerRows(currentPage: number, data: any[]) {
     return data.slice(currentPage * pageSize, (currentPage + 1) * pageSize);
@@ -50,18 +52,19 @@ const EnquiryTable = () => {
 
   const fetchTableData = useCallback(
     async (sort: string, q: string, column: string) => {
-      await axios
-       .get('/api/enquiries', {
+      try {
+        const response = await axios.get('http://localhost:8000/api/v1/user/getAllEnquiries', {
           params: {
             q,
             sort,
             column,
           },
-        })
-       .then((res) => {
-          setTotal(res.data.total);
-          setRows(loadServerRows(page, res.data.data));
         });
+        setTotal(response.data.total);
+        setRows(loadServerRows(page, response.data.data));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     },
     [page, pageSize]
   );
@@ -86,6 +89,36 @@ const EnquiryTable = () => {
     fetchTableData(sort, value, sortColumn);
   };
 
+  const handleRowClick = (params) => {
+    setSelectedRow(params.row);
+    setOpenDialog(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setSelectedRow(null);
+  };
+
+  const handleEnquiryStatusChange = async (status) => {
+    if (selectedRow) {
+      const updatedEnquiry = {
+        ...selectedRow,
+        currentEnquiryStatus: status === 'Accepted' ? 'Accepted' : 'Rejected',
+        enquiryStatus: status === 'Accepted',
+      };
+      
+      try {
+        await axios.put(`http://localhost:8000/api/v1/user/updateEnquiry/${selectedRow._id}`, updatedEnquiry);
+
+
+        fetchTableData(sort, searchValue, sortColumn);
+        handleDialogClose();
+      } catch (error) {
+        console.error('Error updating enquiry:', error);
+      }
+    }
+  };
+
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
@@ -99,6 +132,7 @@ const EnquiryTable = () => {
         onPageChange={(newPage) => setPage(newPage)}
         components={{ Toolbar: ServerSideToolbar }}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        getRowId={(row) => row._id}
         componentsProps={{
           toolbar: {
             value: searchValue,
@@ -106,7 +140,103 @@ const EnquiryTable = () => {
             onChange: (event: any) => handleSearch(event.target.value),
           },
         }}
+        onRowClick={handleRowClick}
       />
+      <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
+        <DialogTitle>Enquiry Details</DialogTitle>
+        <DialogContent>
+          {selectedRow && (
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Name:</strong> {selectedRow.name}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Car Name:</strong> {selectedRow.carName}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Start Date:</strong> {new Date(selectedRow.startDate).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>End Date:</strong> {new Date(selectedRow.endDate).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Pick Up Location:</strong> {selectedRow.pickUpLoc}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Drop Location:</strong> {selectedRow.dropLocation}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Phone Number:</strong> {selectedRow.phoneNumber}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Email:</strong> {selectedRow.email}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Area:</strong> {selectedRow.area}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Message:</strong> {selectedRow.message}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Delivery Mode:</strong> {selectedRow.deliveryMode}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>City:</strong> {selectedRow.city}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Packages:</strong> {selectedRow.packages}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Brand:</strong> {selectedRow.brand}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Model:</strong> {selectedRow.model}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Enquiry Type:</strong> {selectedRow.enquiryType}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Preferred Contact:</strong> {selectedRow.preferredContact}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Budget:</strong> {selectedRow.budget}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Additional Requirements:</strong> {selectedRow.additionalRequirements}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Source:</strong> {selectedRow.source}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Promotional Code:</strong> {selectedRow.promotionalCode}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Preferred Language:</strong> {selectedRow.preferredLanguage}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Current Enquiry Status:</strong> {selectedRow.currentEnquiryStatus}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Enquiry Status:</strong> {selectedRow.enquiryStatus ? 'Active' : 'Inactive'}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Booking Created:</strong> {new Date(selectedRow.bookingCreated).toLocaleDateString()}</Typography>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Typography><strong>Booking Updated:</strong> {new Date(selectedRow.bookingUpdated).toLocaleDateString()}</Typography>
+              </Grid>
+            </Grid>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleEnquiryStatusChange('Accepted')} color="primary">
+            Accept
+          </Button>
+          <Button onClick={() => handleEnquiryStatusChange('Rejected')} color="secondary">
+            Reject
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

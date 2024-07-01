@@ -156,17 +156,20 @@ const getAllCars = asyncHandler(async (req, res) => {
 });
 
 const getCarById = asyncHandler(async (req, res) => {
-  const carId = req.params.id;
-  if (!ObjectId.isValid(carId)) {
-    throw new ApiError(400, "Invalid car id");
-  }
+  const carId = (req.params.id).toString().trim();
+  console.log("🚀 ~ getCarById ~ carId:", carId)
+  // if (!ObjectId.isValid(carId)) {
+  //   throw new ApiError(400, "Invalid car id");
+  // }
 
-  const carIdObjectId = new ObjectId(carId);
+  const carIdObjectId =new ObjectId(carId);
+  console.log("🚀 ~ getCarById ~ carIdObjectId:", carIdObjectId)
   
   const car = await Car.findOne(carIdObjectId).populate("carFeatures").populate("packageDetails").populate("carImages");
+  console.log("🚀 ~ getCarById ~ car:", car)
   if (!car) {
     throw new ApiError(404, "Car not found");
-  }
+  } // 
   res.status(200).json({
     success: true,
     data: car,

@@ -1,5 +1,6 @@
 // ** React Imports
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router'; 
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid';
@@ -35,7 +36,9 @@ import { FormControl } from '@mui/material';
 import { brandsAndModels, colors } from 'src/lib/brandAmodels';
 import data from 'src/@fake-db/components/data';
 
-const CarUpdate = ({ carId }) => {
+const CarUpdate = () => {
+  const router = useRouter(); 
+  const carId  = router.query._id;
   const { register, handleSubmit, setValue } = useForm();
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState('');
@@ -49,7 +52,8 @@ const CarUpdate = ({ carId }) => {
   const [cruiseControl, setCruiseControl] = useState(false);
   const hiddenInputRef = useRef();
   const [carDetails, setCarDetails] = useState(null);
-
+  console.log("🚀 ~ CarUpdate ~ carDetails:", carDetails)
+  
   useEffect(() => {
     const fetchCarDetails = async () => {
       try {
@@ -65,11 +69,14 @@ const CarUpdate = ({ carId }) => {
     fetchCarDetails();
   }, [carId]);
 
-  const setFormValues = (data) => {
-    setValue('brand', data.brand);
-    setValue('model', data.model);
-    setValue('version', data.version);
-    setValue('year', data.year);
+  const setFormValues = (data:any) => {
+    setSelectedBrand(data.brand);
+    setSelectedModel(data.model);
+    setSelectedVersion(data.version);
+    setSelectedYear(data.year);
+    setSelectedColorExterior(data.colourExterior);
+    setSelectedColorInterior(data.colourInterior);
+    setSelectedColor(data.colour);
     setValue('colour', data.colour);
     setValue('carFeatures', data.carFeatures);
     setValue('gccSpecs', data.gccSpecs);
@@ -101,6 +108,7 @@ const CarUpdate = ({ carId }) => {
     setValue('sixMonthCharge', data.sixMonthCharge);
     setValue('NineMonthCharge', data.NineMonthCharge);
     setPreview(data.imageUrl);
+    setImagePreviewUrl(data.imageUrl);
   };
 
 
@@ -248,9 +256,7 @@ const CarUpdate = ({ carId }) => {
                 <Select
                   labelId="version-label"
                   id="version-select"
-                  value
-
-                  ={selectedVersion}
+                  value={selectedVersion}
                   label="Version"
                   {...register('version')}
                   onChange={handleVersionChange}
@@ -333,8 +339,8 @@ const CarUpdate = ({ carId }) => {
                 control={
                   <Checkbox
                     checked={cruiseControl}
-                    onChange={(e) => setCruiseControl(e.target.checked)}
                     {...register('cruiseControl')}
+                    onChange={(e) => setCruiseControl(e.target.checked)}
                   />
                 }
                 label="Cruise Control"
@@ -577,8 +583,8 @@ const CarUpdate = ({ carId }) => {
                 id="image"
                 name="image"
                 onChange={handleImageUpload}
-                ref={hiddenInputRef}
                 style={{ display: 'none' }}
+                ref={hiddenInputRef}
               />
               <Box display="flex" alignItems="center">
                 <Button variant="contained" component="span" onClick={onUpload}>

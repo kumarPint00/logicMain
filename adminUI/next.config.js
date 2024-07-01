@@ -1,16 +1,10 @@
-const path = require('path')
+const MillionLint = require('@million/lint');
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 
 // Remove this if you're not using Fullcalendar features
-const withTM = require('next-transpile-modules')([
-  '@fullcalendar/common',
-  '@fullcalendar/react',
-  '@fullcalendar/daygrid',
-  '@fullcalendar/list',
-  '@fullcalendar/timegrid'
-])
-
+const withTM = require('next-transpile-modules')(['@fullcalendar/common', '@fullcalendar/react', '@fullcalendar/daygrid', '@fullcalendar/list', '@fullcalendar/timegrid']);
 module.exports = withTM({
   trailingSlash: true,
   reactStrictMode: false,
@@ -22,8 +16,7 @@ module.exports = withTM({
     config.resolve.alias = {
       ...config.resolve.alias,
       apexcharts: path.resolve(__dirname, './node_modules/apexcharts-clevision')
-    }
-
-    return config
+    };
+    return config;
   }
-})
+});

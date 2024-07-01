@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { type } from "os";
 
 const CarSchema = new Schema({
   name: { type: String, required: false },
   brand: { type: String, required: false },
   model: { type: String, required: false },
+  version:{ type: String, required: false },
   interiorColor: { type: String, required: false },
   exteriorColor: { type: String, required: false },
   year: { type: String, required: false },

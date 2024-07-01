@@ -8,6 +8,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ServerSideToolbar from './ServerSideToolbar';
+import CarUpdate from '../update/[_id]';
+// import CarUpdate from 'src/pages/addresses/update';
 
 const CarTable = () => {
   const [page, setPage] = useState(0);
